@@ -2,19 +2,20 @@
 
 Goal : Run old bourne shell scripts as serverless functions. 
 
-Follow the instructions here : https://blog.alexellis.io/cli-functions-with-openfaas/
+OpenFaaS is very straight forward to setup.  This setup uses a local Docker Swarm. Instructions can be found [here](https://docs.openfaas.com/deployment/docker-swarm/).
 
-OpenFaaS is very straight forward to setup.  This setup used a local Docker Swarm. Instructions can be found [here](https://docs.openfaas.com/deployment/docker-swarm/).
+Follow the instructions [here](https://blog.alexellis.io/cli-functions-with-openfaas). When you reach the "2.1 nmap" section then you can try the following.
 
 ## Setup
  
 ```
 faas new --lang dockerfile sh
+```
 
 Copy [test.sh](./sh/test.sh) into the "sh" directory.
 
 Edit sh.yml to look like : 
-
+```
 provider:
   name: faas
   gateway: http://127.0.0.1:8080
@@ -23,9 +24,9 @@ functions:
     lang: dockerfile
     handler: ./sh
     image: sh:latest
-
+```
 Update Dockerfile to include :
-
+```
 RUN apk add --no-cache whois iputils 
  
 ADD test.sh /tmp/test.sh
