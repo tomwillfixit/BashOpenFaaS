@@ -71,3 +71,21 @@ rtt min/avg/max/mdev = 14.004/14.004/14.004/0.000 ms
 =========================================
 
 ```
+
+## Add more replicas to handle incoming requests
+
+```
+docker service scale sh=3
+
+sh scaled to 3
+overall progress: 3 out of 3 tasks 
+1/3: running   [==================================================>] 
+2/3: running   [==================================================>] 
+3/3: running   [==================================================>] 
+verify: Service converged 
+
+Verify the hostname changes when running this a number of times :
+
+echo -n "amazon.com" | faas invoke sh
+
+```
