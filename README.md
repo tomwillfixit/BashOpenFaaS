@@ -1,6 +1,6 @@
-# Bourne Shell Scripts as Serverless functions 
+# Shell Scripts as Serverless functions 
 
-Goal : Run old bourne shell scripts as serverless functions. 
+Goal : Run old shell scripts as serverless functions. 
 
 OpenFaaS is very straight forward to setup.  This setup uses a local Docker Swarm. Instructions can be found [here](https://docs.openfaas.com/deployment/docker-swarm/).
 
@@ -37,6 +37,7 @@ ENV fprocess="xargs sh /tmp/test.sh"
 
 ## Build and Deploy
 
+Example is for .sh scripts. Works for bash too.
 ```
 faas build -f sh.yml  && faas deploy -f sh.yml
 ```
