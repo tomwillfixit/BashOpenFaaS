@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo "Hostname : ${HOSTNAME}"
 echo "========================================="
 echo "Running WHOIS for : $1"
 echo "========================================="
