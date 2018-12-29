@@ -1,5 +1,6 @@
 When trying to get the bash function working the bash service failed to start. It was using the bash:latest image which Tom assumed was the one he had built but it actually pulled bash:latest from dockerhub and used that.
 
+```
 root@tom:/home/tom/openfaas/faas/openfaas_bourne# faas build -no-cache -f bash.yml  && faas deploy -f bash.yml
 [0] > Building bash.
 Building: bash:latest with Dockerfile. Please wait..
@@ -137,3 +138,4 @@ URL: http://127.0.0.1:8080/function/bash
 root@tom:/home/tom/openfaas/faas/openfaas_bourne# docker images |grep bash
 bash                                                test                                       5e997f459427        4 minutes ago       18.1MB
 bash                                                latest                                     863b2b45693e        8 days ago          12.8MB
+```
