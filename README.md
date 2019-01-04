@@ -6,6 +6,10 @@ OpenFaaS is very straight forward to setup.  This setup uses a local Docker Swar
 
 Follow the instructions [here](https://blog.alexellis.io/cli-functions-with-openfaas). When you reach the "2.1 nmap" section then you can try the following.
 
+## Blog post
+
+There is a more detailed blog post [here](https://medium.com/@thomas.shaw78/bash-functions-as-a-service-b4033bc1ee97).
+
 ## Setup
  
 ```
@@ -89,3 +93,40 @@ Verify the hostname changes when running this a number of times :
 echo -n "amazon.com" | faas invoke sh
 
 ```
+
+# Selecting different scripts from same function container
+
+In the example above we have put one script into a container image and invoked it as a FaaS.  If you have a bunch of similar scripts, they are small and share the same dependencies then you could put them into the same container image.  
+
+There is an example [here](./collection). We use a small piece of bash as the top level function and then select the function we require when invoking the collection function.
+
+## Build and deploy the "Collection" function
+```
+faas build collection.yml  && faas deploy -f collection.yml
+
+```
+
+## Invoke different functions from the collection function
+
+Invoke Weather function
+```
+echo -n "--function weather --argument Dublin" | faas invoke collection
+```
+
+Invoke Movie function
+```
+echo -n "--function movies --argument Seven" | faas invoke collection
+```
+
+Invoke cryptocurrency function
+```
+echo -n "--function cryptocurrency" | faas invoke collection
+```
+
+Invoke lyrics function
+```
+echo -n "--function lyrics --argument \"-a U2 -s Beautiful Day\"" | faas invoke collection
+
+```
+
+This method might be frowned upon but it's convenient for evaluation purposes.
