@@ -1,58 +1,54 @@
-# Shell Scripts as Serverless functions 
+# Bash Functions as a Service
 
-Goal : Run old shell scripts as serverless functions. 
-
-OpenFaaS is very straight forward to setup.  This setup uses a local Docker Swarm. Instructions can be found [here](https://docs.openfaas.com/deployment/docker-swarm/).
-
-Follow the instructions [here](https://blog.alexellis.io/cli-functions-with-openfaas). When you reach the "2.1 nmap" section then you can try the following.
+Goal : Run bash scripts as serverless functions. 
 
 ## Blog post
 
 There is a more detailed blog post [here](https://medium.com/@thomas.shaw78/bash-functions-as-a-service-b4033bc1ee97).
 
-## Setup
- 
+OpenFaaS is very straight forward to setup.  This setup uses a local Docker Swarm. Instructions can be found [here](https://docs.openfaas.com/deployment/docker-swarm/).
+
+Follow the instructions [here](https://blog.alexellis.io/cli-functions-with-openfaas). When you reach the "2.1 nmap" section then you can try the following.
+
+## Setup 
+
+
+### Create scaffolding
 ```
-faas new --lang dockerfile sh
+faas new --lang dockerfile bash --prefix tshaw
 ```
 
-Copy [test.sh](./sh/test.sh) into the "sh" directory.
+The prefix will be included in the container image name. For example the image for this function will be called : tshaw/bash:latest.
+Without the prefix the image will be named bash:latest and this may cause issues if there is a publicly available image with the same name.
 
-Edit sh.yml to look like : 
-```
-provider:
-  name: faas
-  gateway: http://127.0.0.1:8080
-functions:
-  sh:
-    lang: dockerfile
-    handler: ./sh
-    image: sh:latest
-```
+### Add in bash script and update Dockerfile 
+
+Copy [test.sh](./bash/test.sh) into the "bash" directory.
+
+
 Update Dockerfile to include :
 ```
-RUN apk add --no-cache whois iputils 
+RUN apk add --no-cache bash whois iputils 
  
 ADD test.sh /tmp/test.sh
 
-ENV fprocess="xargs sh /tmp/test.sh"
+ENV fprocess="xargs bash /tmp/test.sh"
 
 ```
 
 ## Build and Deploy
 
-Example is for .sh scripts. Works for bash too.
 ```
-faas build -f sh.yml  && faas deploy -f sh.yml
+faas build -f bash.yml  && faas deploy -f bash.yml
 ```
 
 ## Test it works
 
-echo -n "google.com" | faas invoke sh
+echo -n "google.com" | faas invoke bash
 
-echo -n "bbc.com" | faas invoke sh
+echo -n "bbc.com" | faas invoke bash
 
-echo -n "amazon.com" | faas invoke sh
+echo -n "amazon.com" | faas invoke bash
 
 Example Output :
 ```
@@ -79,9 +75,9 @@ rtt min/avg/max/mdev = 14.004/14.004/14.004/0.000 ms
 ## Add more replicas to handle incoming requests
 
 ```
-docker service scale sh=3
+docker service scale bash=3
 
-sh scaled to 3
+bash scaled to 3
 overall progress: 3 out of 3 tasks 
 1/3: running   [==================================================>] 
 2/3: running   [==================================================>] 
@@ -90,7 +86,7 @@ verify: Service converged
 
 Verify the hostname changes when running this a number of times :
 
-echo -n "amazon.com" | faas invoke sh
+echo -n "amazon.com" | faas invoke bash
 
 ```
 

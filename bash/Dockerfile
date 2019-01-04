@@ -1,7 +1,5 @@
 FROM alpine:3.8
 
-RUN apk add --no-cache bash
-
 RUN mkdir -p /home/app
 
 RUN apk --no-cache add curl \
@@ -11,7 +9,7 @@ RUN apk --no-cache add curl \
     && cp /usr/bin/fwatchdog /home/app \
     && apk del curl --no-cache
    
-RUN apk add --no-cache whois iputils 
+RUN apk add --no-cache bash whois iputils 
 
 # Add non root user
 RUN addgroup -S app && adduser app -S -G app
